@@ -1,0 +1,18 @@
+{
+  "folders": [
+    {
+      "name": "💡 demand forecast",
+      "path": "."
+    },
+    {
+      "name": "💡 sales forecast",
+      "path": "./apps/sales"
+    }        
+  ],
+  "settings": {
+    "files.exclude": {
+      "apps/**": true,
+      "libs/**": true
+    }
+  }
+}
