@@ -75,6 +75,7 @@
   "devDependencies": {
     "@eslint/eslintrc": "^3.3.1",
     "@gowravshekar/nps-utils": "^2.0.0",
+    "@types/d3": "^7.4.3",
     "@types/eslint-plugin-jsx-a11y": "^6.10.0",
     "@types/jest": "^29.5.14",
     "@types/node": "^22.13.17",
