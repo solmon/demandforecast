@@ -1,11 +1,11 @@
-"use client"
+'use client';
 
-import { Button } from "@/components/ui/button"
-import { Upload } from "lucide-react"
-import { motion } from "framer-motion"
+import { Button } from '@/components/ui/button';
+import { Upload } from 'lucide-react';
+import { motion } from 'framer-motion';
 
 interface DashboardHeaderProps {
-  onUploadClick?: () => void
+  onUploadClick?: () => void;
 }
 
 export function DashboardHeader({ onUploadClick }: DashboardHeaderProps) {
@@ -16,9 +16,7 @@ export function DashboardHeader({ onUploadClick }: DashboardHeaderProps) {
       transition={{ duration: 0.5 }}
       className="sticky top-0 z-10 flex h-16 items-center gap-4 border-b bg-background px-4 md:px-6"
     >
-
-      <div className="flex-1">
-      </div>
+      <div className="flex-1"></div>
       <div className="flex items-center gap-2">
         <Button variant="default" size="sm" className="hidden md:flex" onClick={onUploadClick}>
           <Upload className="mr-2 h-4 w-4" />
@@ -26,6 +24,5 @@ export function DashboardHeader({ onUploadClick }: DashboardHeaderProps) {
         </Button>
       </div>
     </motion.header>
-  )
+  );
 }
-

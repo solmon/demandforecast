@@ -1,13 +1,13 @@
-"use client";
+'use client';
 
-import type React from "react";
-import { useState, useEffect } from "react";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Upload, FileText, CheckCircle, AlertCircle } from "lucide-react";
-import { Progress } from "@/components/ui/progress";
-import { Card, CardContent } from "@/components/ui/card";
-import { motion } from "framer-motion";
+import type React from 'react';
+import { useState, useEffect } from 'react';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Upload, FileText, CheckCircle, AlertCircle } from 'lucide-react';
+import { Progress } from '@/components/ui/progress';
+import { Card, CardContent } from '@/components/ui/card';
+import { motion } from 'framer-motion';
 
 interface CSVUploaderProps {
   onDataLoaded: (data: string[][]) => void;
@@ -36,8 +36,8 @@ export function CSVUploader({ onDataLoaded }: CSVUploaderProps) {
     setFileName(file.name);
     setProgress(5);
 
-    if (!file.name.endsWith(".csv")) {
-      setError("Invalid file format. Please upload a .csv file.");
+    if (!file.name.endsWith('.csv')) {
+      setError('Invalid file format. Please upload a .csv file.');
       setProgress(100);
       setIsLoading(false);
       return;
@@ -53,10 +53,8 @@ export function CSVUploader({ onDataLoaded }: CSVUploaderProps) {
 
     reader.onload = async (event) => {
       setProgress(50);
-      
-      const worker = new Worker(
-        new URL("@/workers/csv-worker.ts", import.meta.url)
-      );
+
+      const worker = new Worker(new URL('@/workers/csv-worker.ts', import.meta.url));
 
       worker.onmessage = (msg) => {
         if (msg.data.type === 'progress') {
@@ -68,7 +66,7 @@ export function CSVUploader({ onDataLoaded }: CSVUploaderProps) {
           setError(msg.data.error);
           setProgress(100);
         }
-        
+
         if (msg.data.type !== 'progress') {
           worker.terminate();
           setIsLoading(false);
@@ -79,7 +77,7 @@ export function CSVUploader({ onDataLoaded }: CSVUploaderProps) {
     };
 
     reader.onerror = () => {
-      setError("Error reading the file.");
+      setError('Error reading the file.');
       setProgress(100);
       setIsLoading(false);
     };
@@ -88,11 +86,7 @@ export function CSVUploader({ onDataLoaded }: CSVUploaderProps) {
   };
 
   return (
-    <motion.div
-      initial={{ opacity: 0, y: 20 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.5 }}
-    >
+    <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5 }}>
       <Card className="border-dashed">
         <CardContent className="p-6">
           <div className="flex flex-col items-center gap-4">
@@ -113,7 +107,7 @@ export function CSVUploader({ onDataLoaded }: CSVUploaderProps) {
                 <Button
                   variant="default"
                   disabled={isLoading}
-                  onClick={() => document.getElementById("csv-upload")?.click()}
+                  onClick={() => document.getElementById('csv-upload')?.click()}
                 >
                   <Upload className="mr-2 h-4 w-4" />
                   Upload CSV
@@ -152,11 +146,7 @@ export function CSVUploader({ onDataLoaded }: CSVUploaderProps) {
                   </motion.div>
                 )}
 
-                {isLoading && (
-                  <p className="text-sm text-muted-foreground">
-                    Processing data...
-                  </p>
-                )}
+                {isLoading && <p className="text-sm text-muted-foreground">Processing data...</p>}
 
                 {(success || error) && (
                   <Button

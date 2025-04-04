@@ -1,23 +1,23 @@
-"use client"
+'use client';
 
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { motion } from "framer-motion"
-import type { LucideIcon } from "lucide-react"
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { motion } from 'framer-motion';
+import type { LucideIcon } from 'lucide-react';
 
 interface StatsCardProps {
-  title: string
-  value: string | number
-  description?: string
-  icon?: LucideIcon
+  title: string;
+  value: string | number;
+  description?: string;
+  icon?: LucideIcon;
   trend?: {
-    value: number
-    label: string
-  }
-  delay?: number
+    value: number;
+    label: string;
+  };
+  delay?: number;
 }
 
 export function StatsCard({ title, value, description, icon: Icon, trend, delay = 0 }: StatsCardProps) {
-  const isPositive = trend ? trend.value > 0 : false
+  const isPositive = trend ? trend.value > 0 : false;
 
   return (
     <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5, delay }}>
@@ -29,7 +29,7 @@ export function StatsCard({ title, value, description, icon: Icon, trend, delay 
               initial={{ scale: 0 }}
               animate={{ scale: 1 }}
               transition={{
-                type: "spring",
+                type: 'spring',
                 stiffness: 260,
                 damping: 20,
                 delay: delay + 0.1,
@@ -52,13 +52,13 @@ export function StatsCard({ title, value, description, icon: Icon, trend, delay 
           {description && <p className="text-xs text-muted-foreground">{description}</p>}
           {trend && (
             <motion.div
-              className={`mt-2 flex items-center text-xs ${isPositive ? "text-green-500" : "text-red-500"}`}
+              className={`mt-2 flex items-center text-xs ${isPositive ? 'text-green-500' : 'text-red-500'}`}
               initial={{ opacity: 0, x: -10 }}
               animate={{ opacity: 1, x: 0 }}
               transition={{ duration: 0.3, delay: delay + 0.3 }}
             >
               <span className="mr-1">
-                {isPositive ? "↑" : "↓"} {Math.abs(trend.value)}%
+                {isPositive ? '↑' : '↓'} {Math.abs(trend.value)}%
               </span>
               <span className="text-muted-foreground">{trend.label}</span>
             </motion.div>
@@ -66,6 +66,5 @@ export function StatsCard({ title, value, description, icon: Icon, trend, delay 
         </CardContent>
       </Card>
     </motion.div>
-  )
+  );
 }
-
