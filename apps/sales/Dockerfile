@@ -11,14 +11,20 @@ COPY package.json ./
 
 # Install dependencies
 # RUN yarn install --frozen-lockfile
-RUN yarn config set strict-ssl false
-RUN yarn install
+RUN export NODE_TLS_REJECT_UNAUTHORIZED=0
+ENV NODE_TLS_REJECT_UNAUTHORIZED=0
+RUN corepack enable
+RUN corepack prepare yarn@4.6.0 --activate
+RUN npm config set strict-ssl false
+RUN yarn config set enableStrictSsl false
+RUN yarn set version 4.6.0
 
 # Copy the rest of the application code to the working directory
 COPY . .
 
+RUN yarn install
 # Build the application
-RUN yarn build
+RUN yarn workspace @app/sales run build
 # Build the Next.js app
 # RUN npm run build && \
 # 		npm prune --production
@@ -33,10 +39,11 @@ RUN addgroup -S appgroup && adduser -S appuser -G appgroup
 WORKDIR /app
 
 # Copy only the necessary files from the builder stage
-COPY --from=builder /app/.next/standalone ./
-COPY --from=builder /app/.next/static ./.next/static
-COPY --from=builder /app/public ./public
+COPY --from=builder /app/apps/sales/package*.json ./
+COPY --from=builder /app/apps/sales/.next ./.next
+COPY --from=builder /app/apps/sales/public ./public
 
+RUN yarn install --production
 # Change ownership to the non-root user
 RUN chown -R appuser:appgroup /app
 
