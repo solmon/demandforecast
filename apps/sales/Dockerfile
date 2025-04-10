@@ -30,32 +30,32 @@ RUN yarn workspace @app/sales run build
 # 		npm prune --production
 
 # Stage 2: Create the final image
-FROM node:22-alpine
+# FROM node:22-alpine
 
 # Create a non-root user
 RUN addgroup -S appgroup && adduser -S appuser -G appgroup
 
 # Set the working directory inside the container
-WORKDIR /app
+# WORKDIR /app
 
 # Copy only the necessary files from the builder stage
-COPY --from=builder /app/apps/sales/package*.json ./
-COPY --from=builder /app/apps/sales/.next ./.next
-COPY --from=builder /app/apps/sales/public ./public
+# COPY --from=builder /app/apps/sales/node_modules ./node_modules
+# COPY --from=builder /app/apps/sales/.next ./.next
+# COPY --from=builder /app/apps/sales/public ./public
 
-RUN yarn install --production
+# RUN yarn install --production
 # Change ownership to the non-root user
-RUN chown -R appuser:appgroup /app
+# RUN chown -R appuser:appgroup /app
 
 # Switch to the non-root user
-USER appuser
+# USER appuser
 
 # Expose port 8080 to the outside world
-EXPOSE 8080
+EXPOSE 3001
 
 # Set environment variable to specify the port
-ENV PORT 8080
+ENV PORT 3001
 
 # Start the Next.js app
 # CMD ["node", "server.js"]
-CMD ["yarn", "start"]
+CMD ["yarn", "workspace", "@app/sales", "run", "start"]
