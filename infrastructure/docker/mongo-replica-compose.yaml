@@ -1,0 +1,52 @@
+version: "3.8"
+
+services:
+  mongo1:
+    image: mongodb/mongodb-community-server:latest
+    command: ["--replSet", "rs0", "--bind_ip_all", "--port", "27017"]
+    ports:
+      - 27017:27017
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    healthcheck:
+      test: echo "try { rs.status() } catch (err) { rs.initiate({_id:'rs0',members:[{_id:0,host:'host.docker.internal:27017'}]}) }" | mongosh --port 27017 --quiet
+      interval: 30s
+      timeout: 60s
+      start_period: 0s
+      start_interval: 1s
+      retries: 30
+    networks:
+      - intranet
+    volumes:
+      - "mongo1_data:/data/db"
+      - "mongo1_config:/data/configdb"
+  postgres:
+    image: postgres:14-alpine
+    ports:
+      - 5432:5432
+    networks:
+      - intranet
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    environment:
+      - POSTGRES_PASSWORD=Yarn@2021
+      - POSTGRES_USER=fielduser
+      - POSTGRES_DB=hydra  
+  nodered:
+    image: nodered/node-red:latest
+    ports:
+      - 1880:1880
+    networks:
+      - intranet      
+    volumes:
+      - "nodered_data:/data"
+    environment:
+      - TZ=Asia/Kolkata    
+networks:
+  intranet:
+volumes:
+  mongo1_data:
+  mongo1_config:
+  postgres_data:
+  nodered_data:
+  hydra-sqlite:

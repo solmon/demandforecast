@@ -1,0 +1,27 @@
+services:
+  hydra:
+    image: oryd/hydra:v2.2.0
+    ports:
+      - "4444:4444" # Public port
+      - "4445:4445" # Admin port
+      - "5555:5555" # Port for hydra token user
+    command: serve -c /etc/config/hydra/hydra.yml all --dev
+    volumes:
+      - type: volume
+        source: hydra-sqlite
+        target: /var/lib/sqlite
+        read_only: false
+      - type: bind
+        source: ./contrib/hydra
+        target: /etc/config/hydra
+    environment:
+      - DSN=postgres://fielduser:Yarn@2021@postgres:5432/hydra?sslmode=disable&max_conns=20&max_idle_conns=4
+    restart: unless-stopped
+    # depends_on:
+    #   - hydra-migrate
+    networks:
+      - intranet
+networks:
+  intranet:
+volumes:
+  hydra-sqlite:
