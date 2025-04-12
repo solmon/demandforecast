@@ -55,5 +55,10 @@
     "commitizen": {
       "path": "./node_modules/cz-conventional-changelog"
     }
+  },
+  "dependencies": {
+    "jose": "^6.0.10",
+    "jwt-decode": "^4.0.0",
+    "nanoid": "^5.1.5"
   }
 }
