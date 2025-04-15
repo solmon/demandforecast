@@ -1,5 +1,6 @@
 import NextAuth from "next-auth";
 import GoogleProvider from "next-auth/providers/google";
+import GitHubProvider from "next-auth/providers/github";
 import { getUserRoles } from "@/lib/db-utils";
 
 // Configure authentication options
@@ -13,6 +14,10 @@ export const authOptions = {
             scope: 'openid email profile',
           },
         },  
+    }),
+    GitHubProvider({
+      clientId: process.env.GITHUB_CLIENT_ID!,
+      clientSecret: process.env.GITHUB_CLIENT_SECRET!
     }),
   ],
   callbacks: {

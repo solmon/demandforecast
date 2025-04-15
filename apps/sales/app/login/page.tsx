@@ -6,7 +6,7 @@ import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle }
 import { useSearchParams } from 'next/navigation';
 import { useState } from 'react';
 import { Alert, AlertDescription } from '@/components/ui/alert';
-import { AlertCircle } from 'lucide-react';
+import { AlertCircle, Github } from 'lucide-react';
 
 export default function LoginPage() {
   const searchParams = useSearchParams();
@@ -18,13 +18,18 @@ export default function LoginPage() {
     await signIn('google', { callbackUrl: '/' });
   };
 
+  const handleGithubSignIn = async () => {
+    setIsLoading(true);
+    await signIn('github', { callbackUrl: '/' });
+  };
+
   return (
     <div className="flex min-h-screen items-center justify-center bg-gray-50 px-4 py-12 sm:px-6 lg:px-8">
       <Card className="w-full max-w-md">
         <CardHeader className="space-y-1">
           <CardTitle className="text-2xl font-bold text-center">Sign in to Sales App</CardTitle>
           <CardDescription className="text-center">
-            Use your Google account to continue
+            Sign in with your preferred account
           </CardDescription>
         </CardHeader>
         <CardContent className="space-y-4">
@@ -45,6 +50,16 @@ export default function LoginPage() {
             disabled={isLoading}
           >
             {isLoading ? 'Signing in...' : 'Sign in with Google'}
+          </Button>
+          
+          <Button 
+            className="w-full flex items-center justify-center gap-2" 
+            onClick={handleGithubSignIn}
+            disabled={isLoading}
+            variant="outline"
+          >
+            <Github className="h-4 w-4" />
+            {isLoading ? 'Signing in...' : 'Sign in with GitHub'}
           </Button>
         </CardContent>
         <CardFooter className="flex justify-center text-sm text-gray-500">
