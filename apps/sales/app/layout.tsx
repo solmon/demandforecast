@@ -1,6 +1,7 @@
 import type React from 'react';
 import '@/app/globals.css';
 import { ThemeProvider } from '@/src/components/theme-provider';
+import AuthProvider from './providers/auth-provider';
 
 export default async function RootLayout({ children }: { children: React.ReactNode }) {
 
@@ -10,9 +11,11 @@ export default async function RootLayout({ children }: { children: React.ReactNo
         <title> Analytics Dashboard</title>
       </head>
       <body>
-        <ThemeProvider attribute="class" defaultTheme="system" enableSystem disableTransitionOnChange>
-          {children}
-        </ThemeProvider>
+        <AuthProvider>
+          <ThemeProvider attribute="class" defaultTheme="system" enableSystem disableTransitionOnChange>
+            {children}
+          </ThemeProvider>
+        </AuthProvider>
       </body>
     </html>
   );
