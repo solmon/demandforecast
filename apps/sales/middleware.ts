@@ -10,8 +10,8 @@ export async function middleware(req: NextRequest) {
     secureCookie: process.env.NODE_ENV === "production",
   });
 
-  // If no token and accessing a protected route, redirect to login
-  if (!token && req.nextUrl.pathname.startsWith("/dashboard")) {
+  // If no token and accessing a protected route (including root path), redirect to login
+  if (!token && (req.nextUrl.pathname === "/" || req.nextUrl.pathname.startsWith("/dashboard"))) {
     const loginUrl = new URL("/login", req.url);
     return NextResponse.redirect(loginUrl);
   }
@@ -60,5 +60,5 @@ export async function middleware(req: NextRequest) {
 }
 
 export const config = {
-  matcher: ["/dashboard/:path*"], // Protect dashboard routes
+  matcher: ["/", "/dashboard/:path*"], // Protect root path and dashboard routes
 };
