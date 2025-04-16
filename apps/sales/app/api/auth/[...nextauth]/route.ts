@@ -1,27 +1,77 @@
 import NextAuth from "next-auth";
+import type { NextAuthOptions } from "next-auth";
 import GoogleProvider from "next-auth/providers/google";
 import GitHubProvider from "next-auth/providers/github";
 import { getUserRoles } from "@/lib/db-utils";
+import { Agent } from "https";
+import type { JWT } from "next-auth/jwt";
+import type { Account, Profile } from "next-auth";
+
+// Extend the built-in session types
+declare module "next-auth" {
+  interface Session {
+    provider?: string;
+    user: {
+      name?: string | null;
+      email?: string | null;
+      image?: string | null;
+      roles?: string[];
+      tenantId?: string;
+      tenantName?: string;
+      accessToken?: string;
+    }
+  }
+  
+  interface User {
+    roles?: string[];
+    tenantId?: string;
+    tenantName?: string;
+    accessToken?: string;
+  }
+}
+
+// Extend the JWT type
+declare module "next-auth/jwt" {
+  interface JWT {
+    userRole?: string[];
+    tenantId?: string;
+    tenantName?: string;
+    accessToken?: string;
+    provider?: string;
+  }
+}
 
 // Configure authentication options
-export const authOptions = {
+export const authOptions: NextAuthOptions = {
   providers: [
     GoogleProvider({
       clientId: process.env.GOOGLE_CLIENT_ID!,
       clientSecret: process.env.GOOGLE_CLIENT_SECRET!,
       authorization: {
-          params: {
-            scope: 'openid email profile',
-          },
-        },  
+        params: {
+          scope: 'openid email profile',
+        },
+      },
+      httpOptions: {
+        timeout: 40000,
+        agent: new Agent({ 
+          rejectUnauthorized: false // This bypasses certificate validation, use only in dev environments
+        })
+      },
     }),
     GitHubProvider({
       clientId: process.env.GITHUB_CLIENT_ID!,
-      clientSecret: process.env.GITHUB_CLIENT_SECRET!
+      clientSecret: process.env.GITHUB_CLIENT_SECRET!,
+      httpOptions: {
+        timeout: 40000,
+        agent: new Agent({ 
+          rejectUnauthorized: false // This bypasses certificate validation, use only in dev environments
+        })
+      },
     }),
   ],
   callbacks: {
-    async jwt({ token, account, profile }) {
+    async jwt({ token, account, profile, user }) {
       // If this is the first sign-in, we'll have account information
       if (account) {
         token.accessToken = account.access_token;
@@ -48,12 +98,12 @@ export const authOptions = {
     async session({ session, token }) {
       // Add custom properties to the session user object
       if (session.user) {
-        session.user.roles = token.userRole as string[];
-        session.user.tenantId = token.tenantId as string;
-        session.user.tenantName = token.tenantName as string;
-        session.user.accessToken = token.accessToken as string;
+        session.user.roles = token.userRole;
+        session.user.tenantId = token.tenantId;
+        session.user.tenantName = token.tenantName;
+        session.user.accessToken = token.accessToken;
       }
-      session.provider = token.provider as string;
+      session.provider = token.provider;
       
       return session;
     },
