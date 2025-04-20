@@ -3,6 +3,7 @@ import type { NextConfig } from 'next';
 const { SALES_URL } = process.env;
 
 const nextConfig: NextConfig = {
+  assetPrefix: "/lander-static",
   /* config options here */
   eslint: {
     ignoreDuringBuilds: true,

@@ -1,4 +1,5 @@
 import type { NextConfig } from 'next';
+const { LANDER_URL } = process.env;
 
 const nextConfig: NextConfig = {
   assetPrefix: "/sales-static",
@@ -12,6 +13,18 @@ const nextConfig: NextConfig = {
     // your project has type errors.
     // !! WARN !!
     ignoreBuildErrors: true,
+  },
+  async rewrites() {
+    return [
+      {
+        source: "/login",
+        destination: `${LANDER_URL}/login`,
+      },
+      {
+        source: "/login/:path+",
+        destination: `${LANDER_URL}/login/:path+`,
+      }
+    ];
   },
 };
 
