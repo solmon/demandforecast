@@ -1,6 +1,7 @@
 import type { NextConfig } from 'next';
 
 const nextConfig: NextConfig = {
+  assetPrefix: "/sales-static",
   /* config options here */
   eslint: {
     ignoreDuringBuilds: true,

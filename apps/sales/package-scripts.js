@@ -2,8 +2,8 @@ const { crossEnv } = require('@gowravshekar/nps-utils');
 
 const mainScripts = require('../../scripts/nps/next.package-scripts')({
   packageName: '@app/sales',
-  devPort: 3001,
-  prodPort: 3001,
+  devPort: 3002,
+  prodPort: 3002,
 });
 
 module.exports = {
