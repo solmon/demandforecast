@@ -8,7 +8,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
   return (
     <html lang="en" suppressHydrationWarning>
       <head>
-        <title> Analytics Dashboard</title>
+        <title> Landing for Analytics Dashboard</title>
       </head>
       <body>
         <AuthProvider>

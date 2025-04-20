@@ -7,6 +7,10 @@
     {
       "name": "💡 sales forecast",
       "path": "./apps/sales"
+    },
+    {
+      "name": "💡 landing platform",
+      "path": "./apps/lander"
     }        
   ],
   "settings": {
