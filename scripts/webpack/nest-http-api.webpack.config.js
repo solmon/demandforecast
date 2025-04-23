@@ -1,6 +1,14 @@
 const nodeExternals = require('webpack-node-externals');
 const { RunScriptWebpackPlugin } = require('run-script-webpack-plugin');
 const { GitRevisionPlugin } = require('git-revision-webpack-plugin');
+const Dotenv = require('dotenv-webpack');
+const path = require('path');
+const dotenv = require('dotenv');
+
+// Load environment variables as first step
+const env_path = path.resolve(process.cwd(), `.env.${process.env.NODE_ENV || 'development'}`);
+dotenv.config({ path: env_path });
+console.log(`Loading environment from: ${env_path}`);
 
 // config helpers:
 const ensureArray = (config) => (config && (Array.isArray(config) ? config : [config])) || [];
@@ -52,7 +60,7 @@ const getOptions = () => ({
   ],
 });
 
-const getPlugins = ({ options, webpack }) => [
+const getPlugins = ({ options, webpack, dotenvConfig = {} }) => [
   new webpack.DefinePlugin({
     __GIT_VERSION__: JSON.stringify(gitVersion),
     __BUILD_TIME__: new Date().getTime(),
@@ -62,6 +70,13 @@ const getPlugins = ({ options, webpack }) => [
     __OPEN_API__: env.__OPEN_API__,
   }),
   new webpack.WatchIgnorePlugin({ paths: [/\.js$/, /\.d\.ts$/] }),
+  new Dotenv({
+    path: dotenvConfig.path || path.resolve(process.cwd(), `.env.${process.env.NODE_ENV || 'development'}`),
+    safe: dotenvConfig.safe !== undefined ? dotenvConfig.safe : true,
+    systemvars: dotenvConfig.systemvars !== undefined ? dotenvConfig.systemvars : true,
+    defaults: dotenvConfig.defaults !== undefined ? dotenvConfig.defaults : false,
+    silent: dotenvConfig.silent !== undefined ? dotenvConfig.silent : false,
+  }),
   ...when(!production, [
     new webpack.HotModuleReplacementPlugin(),
     new RunScriptWebpackPlugin({
